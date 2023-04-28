@@ -21,26 +21,26 @@ class People
 
     #[ORM\Column(length: 255)]
 
-    #[Groups('read:Movie')]
+    #[Groups(['read:collection', 'read:Movie'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('read:Movie')]
+    #[Groups(['read:collection', 'read:Movie'])]
     private ?string $lastname = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups('read:Movie')]
+    #[Groups(['read:collection', 'read:Movie'])]
     private ?\DateTimeInterface $date_of_birth = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('read:Movie')]
+    #[Groups(['read:collection', 'read:Movie'])]
     private ?string $nationality = null;
 
 
     public function __construct()
     {
     }
-    
+
     // methode magique __toString permet de serialisé la 'jointure'
     public function __toString()
     {
