@@ -1,0 +1,24 @@
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    color: white;
+    transition: background-color 1s;
+}
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    color: white;
+
+}
+
+nav ul li {
+    margin: 12px;
+    color: white;
+
+}
+.navblack{
+    background-color: white;
+}

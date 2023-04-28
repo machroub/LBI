@@ -1,0 +1,6 @@
+resources:
+    # configuration des ressources api platform Via fichier de config
+   App\Entity\Movie: ~
+    App\Entity\People: ~
+    App\Entity\Type: ~
+ 
