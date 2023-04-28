@@ -58,12 +58,6 @@ only one Api call was implemented but it shows how we could consume Api.
 
   </ul>
 
-## <a href="https://pentagon-shine.vercel.app/">Project link</a>
-
-## Contributors
-<h3>Charleson David</h3>👨‍- <a href="https://github.com/normandy17" >Charleson</a>
-<h3>Amal Biju</h3>👨‍ -  <a href="https://github.com/amal-biju">Amal</a> 
-<h3>Lanka Sriniwas</h3> 👨‍ - <a href="https://github.com/lsriniwas">Sriniwas</a>
 
 ### Acknowledgments
 <div>
