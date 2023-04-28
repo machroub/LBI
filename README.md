@@ -43,8 +43,7 @@ each time an User ask our Api for a movie, Api check if Poster is available in o
 
 ## <code>Front-end</code>
 the front end is used to be the client part of the project.
-only one Api call was implemented but it shows how we could consume Api.
-
+only one Api call was implemented but it shows how we could consume Api.(No css here )
 
 ### Tech Library used:
   <ul>
@@ -61,5 +60,5 @@ only one Api call was implemented but it shows how we could consume Api.
 
 ### Acknowledgments
 <div>
-  We take all the responsiblity for every single line of code. The design inspired from Shine.com
+  We take all the responsiblity for every single line of code.
 </div>
