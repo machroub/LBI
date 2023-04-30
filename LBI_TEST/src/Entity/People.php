@@ -2,44 +2,93 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\PeopleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PeopleRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    shortName: 'Peoples',
+    description: "liste du staff d'un film",
+    collectionOperations: [
+        'GetPeople' => [
+            'method' => 'GET',
+            'path' => '/getPeoples',
+            'normalization_context' => ['groups' => ['read:collection', 'read:peoples']],
+            "openapi_context" => [
+                "summary" => 'Get a collection of people',
+                'description' => '# Get a collection of movies including their movies ',
+            ]
+        ],
+
+    ],
+
+    //config des Operations sur des items
+    itemOperations: [
+        // Route Custom
+        'Getpeople' => [
+            'method' => 'GET',
+            'path' => '/getPeople/{id}',
+            // 'controller' => GetMovieController::class,
+            'normalization_context' => ['groups' => ['read:collection', 'read:peoples']],
+            "openapi_context" => [
+                "summary" => 'Get a single people',
+                'description' => '# Get a single people including his movies',
+            ]
+        ],
+    ]
+
+)]
 class People
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
 
-    #[Groups(['read:collection', 'read:Movie'])]
+    #[Groups(['read:collection', 'read:Movie', 'read:people'])]
+    #[ApiFilter(SearchFilter::class)]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['read:collection', 'read:Movie'])]
+    #[ApiFilter(SearchFilter::class)]
     private ?string $lastname = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['read:collection', 'read:Movie'])]
+    #[ApiFilter(SearchFilter::class)]
     private ?\DateTimeInterface $date_of_birth = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['read:collection', 'read:Movie'])]
+    #[ApiFilter(SearchFilter::class)]
     private ?string $nationality = null;
 
+    #[OneToMany(targetEntity: MovieHasPeople::class, mappedBy: 'people')]
+    private Collection $movie;
 
     public function __construct()
     {
+        $this->movie = new ArrayCollection();
     }
+
+    public function getMovie()
+    {
+        return $this->movie;
+    }
+
 
     // methode magique __toString permet de serialisé la 'jointure'
     public function __toString()
@@ -78,14 +127,14 @@ class People
         return $this;
     }
 
-    public function getDateOfBirth(): ?\DateTimeInterface
+    public function getDateOfBirth(): ?string
     {
-        return $this->date_of_birth;
+        return $this->date_of_birth->format('Y-m-d');
     }
 
     public function setDateOfBirth(\DateTimeInterface $date_of_birth): self
     {
-        $this->date_of_birth = $date_of_birth;
+        $this->date_of_birth = $date_of_birth->format('Y-m-d');
 
         return $this;
     }

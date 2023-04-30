@@ -9,20 +9,23 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MovieHasTypeRepository::class)]
-#[ApiResource]
+// #[ApiResource(
+//     shortName: "Movies Type ",
+
+// )]
 class MovieHasType
 {
 
 
     // clé composite 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Movie")]
+    #[ORM\ManyToOne(targetEntity: Movie::class)]
     #[ORM\JoinColumn(name: "movie_id", referencedColumnName: "id")]
     private $movie;
 
     // clé composite 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Type")]
+    #[ORM\ManyToOne(targetEntity: Type::class)]
     #[ORM\JoinColumn(name: "type_id", referencedColumnName: "id")]
     private $type;
 
@@ -42,11 +45,10 @@ class MovieHasType
     }
     public function setMovie($movie)
     {
-         $this->movie= $movie;
+        $this->movie = $movie;
     }
     public function setType($type)
     {
-         $this->type=$type;
+        $this->type = $type;
     }
-
 }

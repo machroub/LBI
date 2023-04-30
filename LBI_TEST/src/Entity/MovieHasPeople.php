@@ -3,45 +3,53 @@
 namespace App\Entity;
 
 // use ApiPlatform\Metadata\ApiResource;
+
+use ApiPlatform\Core\Annotation\ApiFilter;
 use App\Repository\MovieHasPeopleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MovieHasPeopleRepository::class)]
-#[ApiResource(
-    collectionOperations: [
+// #[ApiResource(
+//     shortName: "MovieHasPeople",
+//     collectionOperations: [
 
-        'get' => ['normalization_context' => ['groups' => ['read:collection', 'read:Movie']]],
-    ]
+//         'get' => ['normalization_context' => ['groups' => ['read:collection', 'read:Movie']]],
+//     ]
 
-)]
+// )]
 
 class MovieHasPeople
 {
 
     // clé composite 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Movie")]
-    #[ORM\JoinColumn(name: "movie_id", referencedColumnName: "id")]
-    #[Groups('read:Movie')]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Movie", inversedBy: 'people')]
+    #[ApiFilter(SearchFilter::class, strategy: 'exact')]
+    #[ORM\JoinColumn(name: "movie_id", referencedColumnName: "id", nullable: false)]
+    #[Groups('read:people')]
     private $movie;
 
     // clé composite 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\People")]
-    #[ORM\JoinColumn(name: "people_id", referencedColumnName: "id")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\People", inversedBy: 'movie')]
+    #[ORM\JoinColumn(name: "people_id", referencedColumnName: "id", nullable: false)]
+    #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     #[Groups('read:Movie')]
     private $people;
 
+    #[Groups('read:Movie')]
     #[ORM\Column(length: 255)]
     private ?string $role = null;
 
+    #[Groups('read:Movie')]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('read:MovieHasPeople')]
     private ?string $significance = null;
+
 
 
     public function __construct()
