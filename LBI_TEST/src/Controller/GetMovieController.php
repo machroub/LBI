@@ -34,6 +34,6 @@ class GetMovieController extends AbstractController
             // OTHERWISE CALL IMDB API WITH SYMFONY HTTP CLIENT
         }
 
-        return $movie;
+        return $data;
     }
 }
