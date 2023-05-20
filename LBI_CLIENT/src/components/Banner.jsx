@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import "./Banner.css";
+import "../assets/style/Banner.css";
 import axios from "axios";
 import requests from "../config/requests";
 
@@ -16,11 +16,7 @@ const Banner = () => {
         async function fetchMovies() {
             const request = await axios.get(requests.fetchMovies);
 
-            setMovie(
-                request.data[
-                    Math.floor(Math.random() * request.data.length - 1)
-                ]
-            );
+            setMovie(request.data[Math.floor(Math.random() * request.data.length - 1)]);
         }
         fetchMovies();
     }, []);
