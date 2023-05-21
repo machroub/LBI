@@ -15,23 +15,9 @@ function App() {
             <Header />
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="movies" element={<MovieItem movies={data["lastSeen"]} listType="Vos derniers films vus" />} />
-                <Route path="movie/:id" element={<MovieDetail />} />
+                <Route path="movie/:title" element={<MovieDetail />} />
             </Routes>
         </div>
-        // <>
-        //     <Header />
-
-        //     <div className="main">
-        //         <MovieItem movies={data["lastSeen"]} listType="Vos derniers films vus" />
-        //         <MovieItem movies={data["lastviewed"]} listType="Vos derniers films ajoutés" />
-        //         <MovieItem movies={data["Best"]} listType="Vos meilleurs films" />
-        //         {/* <Header />
-        //     <Banner />
-        //     <SearchForm />
-        //     <Footer /> */}
-        //     </div>
-        // </>
     );
 }
 

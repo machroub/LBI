@@ -57,6 +57,8 @@ class Movie
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read:collection', 'read:Movie', 'read:people'])]
+
     private ?int $id = null;
 
     // titre du film
@@ -77,6 +79,9 @@ class Movie
     #[Groups('read:collection')]
     #[ORM\OneToMany(targetEntity: MovieHasPeople::class, mappedBy: 'movie')]
     private $people;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $poster = null;
 
 
     public function __construct()
@@ -123,6 +128,18 @@ class Movie
     public function setDuration(int $duration): self
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getPoster(): ?string
+    {
+        return $this->poster;
+    }
+
+    public function setPoster(?string $poster): self
+    {
+        $this->poster = $poster;
 
         return $this;
     }

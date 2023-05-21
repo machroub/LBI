@@ -1,23 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../assets/style/MovieItem.css";
+import loader from "../assets/img/loading.gif";
 import { Link } from "react-router-dom";
-export default function MovieItem({ movies, listType }) {
+import { fetchMovies } from "../assets/movies/movie";
+import axios from "axios";
+export default function MovieItem() {
+    const [movie, setMovie] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        async function getMovie() {
+            const data = await fetchMovies();
+            setMovie(data);
+            setLoading(false);
+        }
+        getMovie();
+    }, []);
+    console.log(movie);
     return (
         <div className="Movie_ctn">
-            <div>
-                <h1>{listType}</h1>
-            </div>
             <div className="MovieItem_ctn">
-                {movies.map((movie) => {
-                    return (
-                        <Link to={`/movie/${movie.id}`} key={movie.id}>
-                            <div className="MovieItem">
-                                {movie.poster && <img src={movie.poster} alt="affiche du film" className="poster" />}
-                                <p>{movie.title}</p>
-                            </div>
-                        </Link>
-                    );
-                })}
+                {!loading ? (
+                    movie.map((movi) => {
+                        return (
+                            <Link to={`/movie/${movi.title}`} key={movi.id}>
+                                <div className="MovieItem">
+                                    {movi.poster && <img src={movi.poster} alt="affiche du film" className="poster" />}
+                                    <p>{movi.title}</p>
+                                </div>
+                            </Link>
+                        );
+                    })
+                ) : (
+                    <b>
+                        <img src={loader} alt="loader" className="loader" style={{ mixBlendMode: "color" }} />
+                    </b>
+                )}
             </div>
         </div>
     );

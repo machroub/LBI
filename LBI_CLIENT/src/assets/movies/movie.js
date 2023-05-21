@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const data = {
     lastSeen: [
         {
@@ -46,3 +48,8 @@ const data = {
     ],
 };
 export default data;
+
+export async function fetchMovies() {
+    const { data } = await axios.get(`https://localhost:8000/api/getMovies`);
+    return data;
+}
