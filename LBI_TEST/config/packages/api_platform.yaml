@@ -1,6 +1,6 @@
 api_platform:
     defaults:
-        pagination_enabled: false
+        pagination_enabled: true
     mapping:
         paths: [
                 "%kernel.project_dir%/src/Entity",
@@ -10,3 +10,7 @@ api_platform:
         json: ["application/merge-patch+json"]
     swagger:
         versions: [3]
+        api_keys:
+            apiKey:
+                name: api_key
+                type: header

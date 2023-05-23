@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace App\Security;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,14 +23,13 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
      */
     public function supports(Request $request): ?bool
     {
-        if($request->isMethod('get')){
-            return false;
-        }
-        if (!$request->headers->has('api_key')){
-            throw new CustomUserMessageAuthenticationException('Les Opération d\'écriture necessite une clé API');
-
-        }
-        return $request->headers->has('api_key');
+        // if ($request->isMethod('get')) {
+        return false;
+        // }
+        // if (!$request->headers->has('api_key')) {
+        //     throw new CustomUserMessageAuthenticationException('Les Opération d\'écriture necessite une clé API');
+        // }
+        // return $request->headers->has('api_key');
     }
 
     public function authenticate(Request $request): Passport
@@ -55,7 +55,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         $data = [
             // you may want to customize or obfuscate the message first
             // 'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
-            'message'=>'Connexion impossible'
+            'message' => 'Connexion impossible'
             // or to translate this message
             // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
         ];

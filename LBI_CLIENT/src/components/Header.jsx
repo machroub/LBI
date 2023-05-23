@@ -26,9 +26,9 @@ const Header = () => {
                     </Link>
                 </li>
                 <li className="nav__item">
-                    <a className="nav__item__action" href="/">
-                        categories
-                    </a>
+                    <Link className="nav__item__action" to="movie/add">
+                        ajouter un film
+                    </Link>
                 </li>
                 <li className="nav__item">
                     <a className="nav__item__action" href="/">

@@ -12,42 +12,38 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: MovieHasPeopleRepository::class)]
-// #[ApiResource(
-//     shortName: "MovieHasPeople",
-//     collectionOperations: [
-
-//         'get' => ['normalization_context' => ['groups' => ['read:collection', 'read:Movie']]],
-//     ]
-
-// )]
-
 class MovieHasPeople
 {
 
     // clé composite 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Movie", inversedBy: 'people')]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Movie", inversedBy: 'people', cascade: ["persist"])]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
     #[ORM\JoinColumn(name: "movie_id", referencedColumnName: "id", nullable: false)]
-    #[Groups('read:people')]
+
     private $movie;
 
     // clé composite 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: "App\Entity\People", inversedBy: 'movie')]
+    #[ORM\GeneratedValue]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\People", inversedBy: 'movie', cascade: ["persist"])]
     #[ORM\JoinColumn(name: "people_id", referencedColumnName: "id", nullable: false)]
     #[ApiFilter(SearchFilter::class, strategy: 'exact')]
-    #[Groups('read:Movie')]
+    #[Groups(['read:Movie', 'write:Movie'])]
     private $people;
 
-    #[Groups('read:Movie')]
+    #[Groups(['read:Movie', 'write:Movie'])]
     #[ORM\Column(length: 255)]
+    #[SerializedName('poste')]
     private ?string $role = null;
 
-    #[Groups('read:Movie')]
+    #[Groups(['read:Movie', 'write:Movie'])]
     #[ORM\Column(length: 255, nullable: true)]
+    #[SerializedName('type')]
     private ?string $significance = null;
 
 

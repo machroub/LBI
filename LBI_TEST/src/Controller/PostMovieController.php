@@ -2,16 +2,19 @@
 // api/src/Controller/CreateBookPublication.php
 namespace App\Controller;
 
+use ApiPlatform\Api\QueryParameterValidator\Validator\Length;
 use App\Entity\Movie;
 use App\Entity\MovieHasPeople;
 use App\Entity\People;
+use App\Repository\MovieRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
-class GetMovieController extends AbstractController
+#[AsController]
+class PostMovieController extends AbstractController
 {
     protected $em;
 
@@ -21,19 +24,14 @@ class GetMovieController extends AbstractController
     }
 
     // methode magique permettant d'appeller le Controlleur et de gerer l'orm
-    public function __invoke(Movie $data)
+    public function __invoke($data)
     {
-        $movie = $this->em->getRepository(MovieHasPeople::class);
-        $movie = $movie->findByMovie($data->getId());
-        $people = $this->em->getRepository(People::class);
-        foreach ($movie as $index => $movi) {
-            $people = $people->findById($movi->getPeople()->getId());
-
-            // PUT HERE IMDB API LOGIC : CHECK IF POSTER IS ALREADY IN THE ENTITY FIELDS
-            // IF SO RETURN OBEJECT
-            // OTHERWISE CALL IMDB API WITH SYMFONY HTTP CLIENT
+        for ($i = 0; $i < count($data->people); $i++) {
+            $data->people[$i]->setMovie($data);
         }
-
+        // dd($data);
+        $this->em->persist($data);
+        $this->em->flush();
         return $data;
     }
 }

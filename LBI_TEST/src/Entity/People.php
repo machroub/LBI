@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: PeopleRepository::class)]
 #[ApiResource(
@@ -37,7 +38,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'Getpeople' => [
             'method' => 'GET',
             'path' => '/getPeople/{id}',
-            // 'controller' => GetMovieController::class,
             'normalization_context' => ['groups' => ['read:collection', 'read:peoples']],
             "openapi_context" => [
                 "summary" => 'Get a single people',
@@ -57,23 +57,28 @@ class People
 
     #[ORM\Column(length: 255)]
 
-    #[Groups(['read:collection', 'read:Movie', 'read:people'])]
+    #[Groups(['read:collection', 'read:Movie', 'read:people', 'write:Movie'])]
     #[ApiFilter(SearchFilter::class)]
+    #[SerializedName('prenom')]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read:collection', 'read:Movie'])]
+    #[Groups(['read:collection', 'read:Movie', 'write:Movie'])]
     #[ApiFilter(SearchFilter::class)]
+    #[SerializedName('nom')]
     private ?string $lastname = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['read:collection', 'read:Movie'])]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(['read:collection', 'read:Movie', 'read:people', 'write:Movie'])]
     #[ApiFilter(SearchFilter::class)]
+    #[SerializedName('naissance')]
     private ?\DateTimeInterface $date_of_birth = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read:collection', 'read:Movie'])]
+    #[Groups(['read:collection', 'read:Movie', 'write:Movie'])]
     #[ApiFilter(SearchFilter::class)]
+    #[SerializedName('nationalite')]
+
     private ?string $nationality = null;
 
     #[OneToMany(targetEntity: MovieHasPeople::class, mappedBy: 'people')]
@@ -129,12 +134,18 @@ class People
 
     public function getDateOfBirth(): ?string
     {
-        return $this->date_of_birth->format('Y-m-d');
+        if ($this->date_of_birth) {
+            return $this->date_of_birth->format('Y-m-d');
+        }
+        return 'none';
     }
 
     public function setDateOfBirth(\DateTimeInterface $date_of_birth): self
     {
-        $this->date_of_birth = $date_of_birth->format('Y-m-d');
+        if ($this->date_of_birth) {
+
+            $this->date_of_birth = $date_of_birth->format('Y-m-d');
+        }
 
         return $this;
     }

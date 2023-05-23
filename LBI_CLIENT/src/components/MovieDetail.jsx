@@ -14,7 +14,7 @@ export default function MovieDetail() {
                 method: "GET",
                 url: `https://moviesdatabase.p.rapidapi.com/titles/search/title/${movieTitle.title}`,
                 params: {
-                    exact: "true",
+                    exact: "false",
                     titleType: "movie",
                 },
                 headers: {
@@ -23,7 +23,8 @@ export default function MovieDetail() {
                 },
             };
             const response = await axios.request(options);
-            data[0].poster = response.data.results[0]?.primaryImage.url;
+            console.log(response.data);
+            data[0].poster = response.data.results[0]?.primaryImage?.url;
         }
         setMovie(data[0]);
     }
