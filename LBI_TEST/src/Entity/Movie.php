@@ -18,9 +18,12 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 // declaration en tant que ressource API 
 #[ApiResource(
     shortName: "Movies",
-    denormalizationContext: ['groups' => ['write:Movie']],
     // config des Operations sur des collections 
     collectionOperations: [
+        'post' => [
+            'denormalization_context' => ['groups' => ['write:Moviexxx']],
+
+        ],
         'GetMovies' => [
             'method' => 'GET',
             'path' => '/getMovies',
@@ -33,7 +36,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
             'method' => 'POST',
             'path' => '/addMovie',
             'controller' => PostMovieController::class,
-            // 'normalization_context' => ['groups' => ['read:collection', 'read:Movie']],
             'denormalization_context' => ['groups' => ['write:Movie']],
             "openapi_context" => [
                 "summary" => 'Add a movie',
@@ -66,7 +68,7 @@ class Movie
 
     // titre du film
     #[ORM\Column(length: 255)]
-    #[Groups(['read:collection', 'read:Movie', 'read:people', 'write:Movie'])]
+    #[Groups(['read:collection', 'read:Movie', 'read:people', 'write:Movie', 'write:Moviexxx'])]
     #[ApiFilter(SearchFilter::class, strategy: 'partial')]
     #[SerializedName('titre')]
     private ?string $title = null;
@@ -76,7 +78,7 @@ class Movie
     // durée du film
     #[ORM\Column]
     #[ApiFilter(SearchFilter::class, strategy: 'partial')]
-    #[Groups(['read:collection', 'read:Movie', 'write:Movie'])]
+    #[Groups(['read:collection', 'read:Movie', 'write:Movie', 'write:Moviexxx'])]
     #[SerializedName('duree')]
     private ?int $duration = null;
 
@@ -87,7 +89,7 @@ class Movie
     public $people;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read:collection', 'write:Movie'])]
+    #[Groups(['read:collection', 'write:Movie', 'write:Moviexxx'])]
     #[ApiFilter(SearchFilter::class, strategy: 'partial')]
     #[SerializedName('affiche')]
 
@@ -96,7 +98,6 @@ class Movie
 
     public function __construct()
     {
-        $this->id = rand(5000 , 50000);
         $this->people = new ArrayCollection();
     }
 

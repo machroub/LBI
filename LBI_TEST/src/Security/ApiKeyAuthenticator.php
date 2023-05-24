@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,16 +21,17 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
      * Called on every request to decide if this authenticator should be
      * used for the request. Returning `false` will cause this authenticator
      * to be skipped.
+     * 
      */
     public function supports(Request $request): ?bool
     {
-        // if ($request->isMethod('get')) {
-        return false;
-        // }
-        // if (!$request->headers->has('api_key')) {
-        //     throw new CustomUserMessageAuthenticationException('Les Opération d\'écriture necessite une clé API');
-        // }
-        // return $request->headers->has('api_key');
+        if ($request->isMethod('post')) {
+            return false;
+        }
+        if (!$request->headers->has('api_key')) {
+            throw new CustomUserMessageAuthenticationException('Les Opération d\'écriture necessite une clé API');
+        }
+        return $request->headers->has('api_key');
     }
 
     public function authenticate(Request $request): Passport
@@ -54,10 +56,12 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
     {
         $data = [
             // you may want to customize or obfuscate the message first
-            // 'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
-            'message' => 'Connexion impossible'
+            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
+            'indice' => 'Le code est faux batardos faut mettre poussy',
+
+            // 'x'=>$tr->trans($exception->getMessageKey(), $exception->getMessageData())
             // or to translate this message
-            // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
+
         ];
 
         return new JsonResponse($data);
